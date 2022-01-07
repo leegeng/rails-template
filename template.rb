@@ -112,6 +112,10 @@ def after_spring_stop
   yield if block_given?
 end
 
+def arm64?
+  run "arch" == "arm64"
+end
+
 assert_minimum_rails_version
 add_template_repository_to_source_path
 ask_questions
@@ -122,7 +126,9 @@ copy_file "Procfile", "Procfile", force: true
 template "ruby-version.tt", ".ruby-version", force: true
 
 run "gem install bundler --no-document --conservative"
-run "bundle lock --add-platform arm64-darwin"
+if RUBY_PLATFORM.start_with?("arm64")
+  run "bundle lock --add-platform arm64-darwin"
+end
 
 after_bundle do
   run("bundle add rails-i18n image_processing sidekiq letter_opener rspec-rails")
