@@ -122,6 +122,7 @@ copy_file "Procfile", "Procfile", force: true
 template "ruby-version.tt", ".ruby-version", force: true
 
 run "gem install bundler --no-document --conservative"
+run "bundle lock --add-platform arm64-darwin"
 
 after_bundle do
   run("bundle add rails-i18n image_processing sidekiq letter_opener rspec-rails")
